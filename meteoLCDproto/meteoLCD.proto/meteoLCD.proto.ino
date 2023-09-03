@@ -20,7 +20,18 @@ DHT_Unified dht(DHTPIN, DHTTYPE);
 uint32_t delayMS;
 
 
-LiquidCrystal_I2C lcd(0x27, 20, 4);  // адрес, столбцов, строк
+LiquidCrystal_I2C lcd(0x27, 20, 4);  // адрес, столбцов, строк/
+
+byte customChar[] = {
+  B00100,
+  B01110,
+  B11111,
+  B11111,
+  B01110,
+  B00100,
+  B00100,
+  B00100
+};
 
 void setup() {
 
@@ -55,10 +66,23 @@ void setup() {
 
   lcd.init();
   lcd.backlight();
+  lcd.createChar(0, customChar);
+  lcd.home();
+  lcd.setCursor(17, 0);
+  lcd.write(0);
   lcd.setCursor(3, 0);
-  lcd.blink();
+  //lcd.blink();
+  lcd.print("Meteo Station");
 
-
+  //lcd.setCursor(0, 1);
+ // lcd.print("Temperature :");
+  //lcd.setCursor(14, 1);
+  //lcd.print(event.temperature);
+  //lcd.setCursor(0, 2);
+  //lcd.print("Humidity :");
+  //lcd.setCursor(12, 2);
+ // lcd.print(event.relative_humidity);
+ 
   //  for(int i=0; i<21; i++){
   //    lcd.print(i*2);
   //    delay(2000);
@@ -85,6 +109,13 @@ void loop() {
     Serial.print(F("Temperature: "));
     Serial.print(event.temperature);
     Serial.println(F("°C"));
+
+  lcd.setCursor(0, 1);
+  lcd.print("Temperature :");
+  lcd.setCursor(14, 1);
+  lcd.print(event.temperature);
+  
+  
   }
   // Get humidity event and print its value.
   dht.humidity().getEvent(&event);
@@ -95,9 +126,16 @@ void loop() {
     Serial.print(F("Humidity: "));
     Serial.print(event.relative_humidity);
     Serial.println(F("%"));
-  }
-}
 
+    lcd.setCursor(0, 2);
+  lcd.print("Humidity :");
+  lcd.setCursor(12, 2);
+  lcd.print(event.relative_humidity);
+  }
+
+
+  
+}
 /*
 
 */
